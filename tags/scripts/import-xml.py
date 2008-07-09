@@ -3,7 +3,7 @@ from xml.sax import make_parser, saxutils, ContentHandler
 from sys import argv, exit, stderr
 import re
 
-class WikipediaDump(ContentHandler):
+class XelapediaImport(ContentHandler):
   def __init__(self, db):
     self.con=sqlite.connect(dbfile)
     self.cur=self.con.cursor()
@@ -24,21 +24,20 @@ class WikipediaDump(ContentHandler):
       return None
     else:
       # yes, so extract the redirect title
-      m=re.match(r'[^[]*\[\[([^]#]+)(#([^]]*))?\]\]', self.contents[len(REDIRECT):])
+      m=re.match(r'[^[]*\[\[([^]#]+)[^#]]+', self.contents[len(REDIRECT):])
       if m:
-        if '' == m.group(3):
-          return [m.group(1),  None]
-        else:
-          return [m.group(1),  m.group(3)]
+        return m.group(1)
       else:
-        raise Exception("Warning: Illegal redirect in page %s:\n%s\n"
-          % (self.title, self.contents))
+        stderr.write(Exception("Warning: Illegal redirect in page %s:\n%s\n"
+          % (self.title, self.contents)))
+        return None
 
   def findArticleIdForTitle(self, title):
     self.cur.execute('SELECT article_id FROM titles WHERE title=?', (title,))
     return self.cur.fetchone()[0]
 
   def createArticle(self):
+    stderr.write("Processing article %s\n" % self.title)
     redirect = self.checkForRedirect()
 
     if redirect == None:
@@ -52,15 +51,11 @@ class WikipediaDump(ContentHandler):
       self.con.commit()
       self.id += 1
     else:
-      anchor=redirect[1]
-      if anchor == None: anchor=""
-      stderr.write("Info: Found redirect to %s %s\n" % (redirect[0],  anchor))
+      stderr.write("Info: Found redirect to %s\n" % redirect)
       self.cur.execute('INSERT INTO redirects '
-        '(title, redirect, anchor) VALUES(?,?,?)',
-        (self.title, redirect[0], redirect[1]))
+        '(title, redirect) VALUES(?,?)',
+        (self.title, redirect,))
       self.con.commit()
-
-    stderr.write('.')
 
   def startElement(self, name, attrs):
     #print "<%s>" % name
@@ -98,42 +93,24 @@ class WikipediaDump(ContentHandler):
 
 def usage():
   print '''Usage:
-  python import-xml.py import <db file name> <xml file name>
-    imports a wikipedia dump into the database
-  python import-xml.py redirectes <db file name>
-    processes an existing database and resolves redirects'''
-
-def processRedirects(dbfile):
-  return
+  python import-xml.py <db file name> <xml file name>
+    imports a wikipedia dump into the database'''
 
 if __name__=='__main__':
   try:
-    if len(argv) < 2:
+    if len(argv) != 3:
       usage()
       exit(1)
 
-    cmd=argv[1]
-    if cmd == 'import':
-      if len(argv) != 4:
-        usage()
-        exit(1)
-
-      dbfile=argv[2]
-      file=open(argv[3], 'r')
-      parser = make_parser()
-      parser.setContentHandler(WikipediaDump(dbfile))
-      parser.parse(file)
-
-    elif cmd == 'redirects':
-      if len(argv) != 2:
-        usage()
-        exit(1)
-      processRedirects(argv[2])
-
-    else:
-      usage()
-      exit(1)
+    dbfile=argv[1]
+    xmlfile=argv[2]
+    file=open(xmlfile, 'r')
+    parser = make_parser()
+    parser.setContentHandler(XelapediaImport(dbfile))
+    parser.parse(file)
 
     exit(0)
   except KeyboardInterrupt:
     stderr.write('Interrupted!\n')
+
+# End Of File
