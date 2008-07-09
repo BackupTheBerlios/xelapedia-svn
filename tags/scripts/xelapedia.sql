@@ -6,15 +6,19 @@ CREATE TABLE titles(
 DROP TABLE IF EXISTS redirects;
 CREATE TABLE redirects(
   title text UNIQUE PRIMARY KEY,
-  redirect text,
-  anchor text);
+  redirect text);
 DROP TABLE IF EXISTS articles;
 CREATE TABLE articles(
   id integer UNIQUE PRIMARY KEY,
   contents TEXT,
   compressed BLOB);
-DROP TABLE IF EXISTS version;
-CREATE TABLE version(
+DROP TABLE IF EXISTS config;
+CREATE TABLE config(
   id integer UNIQUE PRIMARY KEY,
+  main_page TEXT,
+  image_tag TEXT,
+  category_tag TEXT,
   type text);
-INSERT INTO version (id, type) VALUES(0, 'plain');
+INSERT INTO config (id, main_page, image_tag, category_tag, type) 
+VALUES(0, 'Main Page', NULL, NULL, 'plain');
+-- End Of File --
