@@ -1,4 +1,4 @@
-from sqlite3 import dbapi2 as sqlite
+from pysqlite2 import dbapi2 as sqlite
 from xml.sax import make_parser, saxutils, ContentHandler
 from sys import argv, exit, stderr
 import re
@@ -28,8 +28,8 @@ class XelapediaImport(ContentHandler):
       if m:
         return m.group(1)
       else:
-        stderr.write(Exception("Warning: Illegal redirect in page %s:\n%s\n"
-          % (self.title, self.contents)))
+        stderr.write("Warning: Illegal redirect in page %s:\n%s\n"
+          % (self.title, self.contents))
         return None
 
   def findArticleIdForTitle(self, title):
@@ -37,7 +37,8 @@ class XelapediaImport(ContentHandler):
     return self.cur.fetchone()[0]
 
   def createArticle(self):
-    stderr.write("Processing article %s\n" % self.title)
+    #stderr.write("Processing article %s\n" % self.title)
+    stderr.write('.')
     redirect = self.checkForRedirect()
 
     if redirect == None:
