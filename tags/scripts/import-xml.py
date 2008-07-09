@@ -24,7 +24,7 @@ class XelapediaImport(ContentHandler):
       return None
     else:
       # yes, so extract the redirect title
-      m=re.match(r'[^[]*\[\[([^]#]+)[^#]]+', self.contents[len(REDIRECT):])
+      m=re.match(r'[^[]*\[\[([^]#]+)', self.contents[len(REDIRECT):])
       if m:
         return m.group(1)
       else:
