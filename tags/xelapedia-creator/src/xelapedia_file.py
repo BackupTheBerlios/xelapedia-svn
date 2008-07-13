@@ -30,14 +30,18 @@ class XelapediaFile:
 
   def _readConfiguration(self):
     result=self._cur.execute('SELECT main_page, image_tag, category_tag, type '
-      'FROM config WHERE id=0').readOne()
+      'FROM config WHERE id=0').fetchone()
 
     return Config(result[0], result[1], result[2])
 
   def findTitles(self, startsWith, count=10):
-    return self._cur.execute('SELECT id, title FROM titles WHERE title LIKE \'?%\''
+    return self._cur.execute('SELECT article_id, title FROM titles WHERE title>=?'
       'ORDER BY title ASC', (startsWith,)).fetchmany(count)
 
   def readArticle(self, id):
     return self._cur.execute('SELECT contents '
       'FROM articles WHERE id=?', (id,)).fetchone()[0]
+
+  def mainPage(self):
+    return self._config.mainPage
+
