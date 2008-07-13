@@ -59,12 +59,32 @@ class MainFrame(MainFrameBase):
     self.titleList.Set(items)
     self.titleList.Select(len(titlesBefore))
 
+  def parseHeadings(self, lines):
+    return lines
+
+  def parseLinks(self, lines):
+    return lines
+
+  def previewArticle(self, title, contents):
+    self.SetTitle("Xelapedia Creator - %s" % title)
+    result=contents.splitlines()
+    result=self.parseHeadings(result)
+    result=self.parseLinks(result)
+    result.insert(0, "<HTML><HEAD><TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>" % (title, title))
+    result.append('</BODY></HTML>')
+    self.previewCtrl.SetPage('\n'.join(result))
+
   def titleListHandler(self, evt):
-    self.sourceCtrl.SetValue('')
     if evt.IsSelection():
+      title=evt.GetString()
       id=self._ids[evt.GetSelection()]
       contents=unicode(self._file.readArticle(id))
       self.sourceCtrl.SetValue(contents)
+      self.previewArticle(title, contents)
+    else:
+      self.sourceCtrl.SetValue('')
+      self.previewCtrl.SetPage('')
+      self.SetTitle('Xelapedia Creator')
 
   def menuOpenHandler(self, evt):
     dlg = wx.FileDialog(self, message='Choose a Xelapedia file',
