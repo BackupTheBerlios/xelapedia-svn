@@ -34,9 +34,13 @@ class XelapediaFile:
 
     return Config(result[0], result[1], result[2])
 
-  def findTitles(self, startsWith, count=10):
+  def findTitlesFrom(self, startsWith, count=10):
     return self._cur.execute('SELECT article_id, title FROM titles WHERE title>=?'
       'ORDER BY title ASC', (startsWith,)).fetchmany(count)
+
+  def findTitlesBefore(self, title, count=10):
+    return self._cur.execute('SELECT article_id, title FROM titles WHERE title<?'
+      'ORDER BY title DESC', (title,)).fetchmany(count)
 
   def readArticle(self, id):
     return self._cur.execute('SELECT contents '

@@ -39,14 +39,25 @@ class MainFrame(MainFrameBase):
     if self._file == None:
       return
 
-    titles=self._file.findTitles(self.searchCtrl.GetValue().encode('utf-8'))
+    title=self.searchCtrl.GetValue().encode('utf-8')
     items=[]
     self._ids=[]
+
+    titles=self._file.findTitlesFrom(title, 50)
+    firstTitle=title
+    if len(titles) > 0:
+      firstTitle=titles[0][1]
     for id, title in titles:
       items.append(unicode(title))
       self._ids.append(id)
 
+    titlesBefore=self._file.findTitlesBefore(firstTitle, 50)
+    for id, title in titlesBefore:
+      items.insert(0, unicode(title))
+      self._ids.insert(0, id)
+
     self.titleList.Set(items)
+    self.titleList.Select(len(titlesBefore))
 
   def titleListHandler(self, evt):
     self.sourceCtrl.SetValue('')
