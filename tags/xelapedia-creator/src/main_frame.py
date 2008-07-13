@@ -47,6 +47,7 @@ class MainFrame(MainFrameBase):
     titles=self._file.findTitlesFrom(title, 50)
     firstTitle=title
     if len(titles) > 0:
+      firstId=titles[0][0]
       firstTitle=titles[0][1]
     for id, title in titles:
       items.append(unicode(title))
@@ -60,10 +61,12 @@ class MainFrame(MainFrameBase):
     self.titleList.Set(items)
     self.titleList.Select(len(titlesBefore))
 
+
   def previewArticle(self, title, contents):
     self.SetTitle("Xelapedia Creator - %s" % title)
     converter=Converter(title, contents)
     self.previewCtrl.SetPage(converter.toHtml())
+
 
   def titleListHandler(self, evt):
     if evt.IsSelection():
@@ -76,6 +79,7 @@ class MainFrame(MainFrameBase):
       self.sourceCtrl.SetValue('')
       self.previewCtrl.SetPage('')
       self.SetTitle('Xelapedia Creator')
+
 
   def menuOpenHandler(self, evt):
     dlg = wx.FileDialog(self, message='Choose a Xelapedia file',
