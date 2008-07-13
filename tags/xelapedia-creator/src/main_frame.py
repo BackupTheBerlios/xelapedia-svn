@@ -16,10 +16,50 @@
 #
 from generated import MainFrameBase
 from about_dlg import AboutDialog
+import wx
+from xelapedia_file import XelapediaFile
 
 class MainFrame(MainFrameBase):
+  _file = None
+  _ids = []
+
   def __init__(self, parent, title):
     MainFrameBase.__init__(self, parent, -1, title)
+
+  def openFile(self, filename):
+    self.searchCtrl.SetValue("")
+    self.titleList.Clear()
+    #self.previewCtrl.SetValue("")
+    self.sourceCtrl.SetValue("")
+
+    self._file = XelapediaFile(filename)
+    self.searchCtrl.SetValue(unicode(self._file.mainPage()))
+
+  def searchCtrlTextHandler(self, evt):
+    if self._file == None:
+      return
+
+    titles=self._file.findTitles(self.searchCtrl.GetValue().encode('utf-8'))
+    items=[]
+    self._ids=[]
+    for id, title in titles:
+      items.append(unicode(title))
+      self._ids.append(id)
+
+    self.titleList.Set(items)
+
+  def titleListHandler(self, evt):
+    self.sourceCtrl.SetValue('')
+    if evt.IsSelection():
+      id=self._ids[evt.GetSelection()]
+      contents=unicode(self._file.readArticle(id))
+      self.sourceCtrl.SetValue(contents)
+
+  def menuOpenHandler(self, evt):
+    dlg = wx.FileDialog(self, message='Choose a Xelapedia file',
+      wildcard='*.xelapedia')
+    if wx.ID_OK == dlg.ShowModal():
+      self.openFile(dlg.GetFilename())
 
   def menuQuitHandler(self, evt):
     self.Close()
