@@ -14,22 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import wx
-from main_frame import MainFrame
+from generated import MainFrameBase
+from about_dlg import AboutDialog
 
-class App(wx.App):
-  def OnInit(self):
-    wx.InitAllImageHandlers()
-    mainFrame = MainFrame(None, "")
-    self.SetTopWindow(mainFrame)
-    mainFrame.Maximize(True)
-    mainFrame.Show()
-    return 1
+class MainFrame(MainFrameBase):
+  def __init__(self, parent, title):
+    MainFrameBase.__init__(self, parent, -1, title)
 
+  def menuQuitHandler(self, evt):
+    self.Close()
+    evt.Skip()
 
-if __name__=='__main__':
-  import gettext
-  gettext.install("xelapedia-creator") # replace with the appropriate catalog name
-
-  app = App(0)
-  app.MainLoop()
+  def menuAboutHandler(self, evt):
+    dlg=AboutDialog(self)
+    dlg.ShowModal()
