@@ -18,6 +18,7 @@ from generated import MainFrameBase
 from about_dlg import AboutDialog
 import wx
 from xelapedia_file import XelapediaFile
+from mediawiki_converter import Converter
 
 class MainFrame(MainFrameBase):
   _file = None
@@ -59,20 +60,10 @@ class MainFrame(MainFrameBase):
     self.titleList.Set(items)
     self.titleList.Select(len(titlesBefore))
 
-  def parseHeadings(self, lines):
-    return lines
-
-  def parseLinks(self, lines):
-    return lines
-
   def previewArticle(self, title, contents):
     self.SetTitle("Xelapedia Creator - %s" % title)
-    result=contents.splitlines()
-    result=self.parseHeadings(result)
-    result=self.parseLinks(result)
-    result.insert(0, "<HTML><HEAD><TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>" % (title, title))
-    result.append('</BODY></HTML>')
-    self.previewCtrl.SetPage('\n'.join(result))
+    converter=Converter(title, contents)
+    self.previewCtrl.SetPage(converter.toHtml())
 
   def titleListHandler(self, evt):
     if evt.IsSelection():
