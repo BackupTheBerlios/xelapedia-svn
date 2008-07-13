@@ -30,36 +30,75 @@ class Converter:
       changed=False
       opening = True
 
-      oldpos = 0
       pos = line.find("'''")
       newline=''
       while pos >= 0:
         changed=True
         if opening:
-          newline+=line[oldpos:pos] + '<b>'
+          newline+=line[:pos] + '<b>'
         else:
-          newline+=line[oldpos:pos] + '</b>'
+          newline+=line[:pos] + '</b>'
 
-        oldpos=pos+3
-        pos=line.find("'''", oldpos)
+        line=line[pos+3:]
+        pos=line.find("'''")
         opening=not opening
+
+      newline += line
 
       if changed:
         self._lines[i] = newline
 
       i += 1
 
+  def replaceLinks(self):
+    i=0
+    for line in self._lines:
+      changed=False
+      newline=''
+
+      pos1=line.find('[[')
+      while pos1 >= 0:
+        pos2=line.find(']]',pos1+2)
+
+        if pos2 < 0:
+          break
+
+        changed=True
+        link=line[pos1+2:pos2].partition('|')
+        url=link[0]
+        text=link[2]
+        if len(text) == 0:
+          text=url
+
+        newline+=line[:pos1] + "<a href=\"%s\">%s</a>" % (url, text)
+        line=line[pos2+2:]
+
+        pos1=line.find('[[')
+
+      newline+=line
+      if changed:
+        self._lines[i] = newline
+
+      i += 1
 
   def toHtml(self):
     self.replaceBold()
+    self.replaceLinks()
 
     html='\n'.join(self._lines)
 
-    start = "<HTML><HEAD><TITLE>%s</TITLE></HEAD><BODY><H1>%s</H1>" % \
+    start = "<html><head><title>%s</title></head><body><h1>%s</h1>" % \
       (self._title, self._title)
 
-    return start + html + '</BODY></HTML>'
+    return start + html + '</body></html>'
 
 if __name__=='__main__':
   conv=Converter('title',"This is a '''text''', and '''another one'''")
+  print conv.toHtml().encode('utf-8')
+  conv=Converter('title',"""Link1: [[Einfacher Link]] und so
+  aber nun [[Link|mit alternativem Text]]""")
+  print conv.toHtml().encode('utf-8')
+
+  conv=Converter('title',
+    """'''Majuskel''' (vvun [[Latein|lat.]]: ''majusculus'' = a bisl groesser)""")
   print conv.toHtml().encode('utf-8')
