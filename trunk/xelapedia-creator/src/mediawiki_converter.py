@@ -23,24 +23,24 @@ class Converter:
   def __init__(self, title, contents):
     self._lines = contents.splitlines()
     self._title = title
-
-  def replaceBold(self):
+    
+  def replaceBold(self, what, opentag, closetag):
     i=0
     for line in self._lines:
       changed=False
       opening = True
 
-      pos = line.find("'''")
+      pos = line.find(what)
       newline=''
       while pos >= 0:
         changed=True
         if opening:
-          newline+=line[:pos] + '<b>'
+          newline+=line[:pos] + opentag
         else:
-          newline+=line[:pos] + '</b>'
+          newline+=line[:pos] + closetag
 
-        line=line[pos+3:]
-        pos=line.find("'''")
+        line=line[pos+len(what):]
+        pos=line.find(what)
         opening=not opening
 
       newline += line
@@ -82,7 +82,9 @@ class Converter:
       i += 1
 
   def toHtml(self):
-    self.replaceBold()
+    self.replaceBold("'''''", '<b><i>', '</i></b>')
+    self.replaceBold("'''", '<b>', '</b>')
+    self.replaceBold("''", '<i>', '</i>')
     self.replaceLinks()
 
     html='\n'.join(self._lines)
