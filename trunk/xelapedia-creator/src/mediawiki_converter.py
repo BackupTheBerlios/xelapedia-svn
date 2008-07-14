@@ -80,12 +80,27 @@ class Converter:
         self._lines[i] = newline
 
       i += 1
+  
+  def replaceHeadings(self):
+    i = 0
+    for line in self._lines:
+      hlevel=4
+      while hlevel >= 2:
+        what='='*hlevel
+        if line.startswith(what):
+          endpos=line.find(what, len(what))
+          if endpos>=0:
+            self._lines[i]="<h%d>%s</h%d>" % (hlevel,line[len(what):endpos].strip(),hlevel)
+            break
+        hlevel -= 1
+      i += 1
 
   def toHtml(self):
     self.replaceBold("'''''", '<b><i>', '</i></b>')
     self.replaceBold("'''", '<b>', '</b>')
     self.replaceBold("''", '<i>', '</i>')
     self.replaceLinks()
+    self.replaceHeadings()
 
     html='\n'.join(self._lines)
 
