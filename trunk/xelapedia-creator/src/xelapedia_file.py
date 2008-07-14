@@ -14,7 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from pysqlite2 import dbapi2 as sqlite
+import sys
+if sys.version_info[:2] > (2,4):
+   from sqlite3 import dbapi2 as sqlite
+else:
+   from pysqlite2 import dbapi2 as sqlite
 
 class Config:
   def __init__(self, mainPage='Main Page', imageTag=None, categoryTag=None):
