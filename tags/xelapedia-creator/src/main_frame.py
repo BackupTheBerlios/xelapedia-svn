@@ -85,7 +85,7 @@ class MainFrame(MainFrameBase):
     dlg = wx.FileDialog(self, message='Choose a Xelapedia file',
       wildcard='*.xelapedia')
     if wx.ID_OK == dlg.ShowModal():
-      self.openFile(dlg.GetFilename())
+      self.openFile(dlg.GetPath())
 
   def menuQuitHandler(self, evt):
     self.Close()
