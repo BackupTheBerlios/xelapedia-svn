@@ -30,6 +30,7 @@ class XelapediaImport(ContentHandler):
     self.cur.execute('DELETE FROM articles')
     self.cur.execute('DELETE FROM titles')
     self.cur.execute('DELETE FROM redirects')
+    self.cur.execute('UPDATE config SET type=\'plain\' WHERE id=0')
     self.con.commit()
     self.inTitle = False
     self.inId = False
