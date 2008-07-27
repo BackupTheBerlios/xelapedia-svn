@@ -21,6 +21,7 @@ else:
    from pysqlite2 import dbapi2 as sqlite
 import re
 from os.path import exists
+from os import unlink
 
 SQL='''CREATE TABLE titles(
   title text UNIQUE PRIMARY KEY,
@@ -44,12 +45,15 @@ VALUES(0, 'Main Page', NULL, NULL, 'empty');'''
 class InvalidFilenameException(Exception): pass
 class FileExistsException(Exception): pass
 
-def createXelapedia(filename):
+def createXelapedia(filename, overwrite=True):
   if not filename.endswith('.xelapedia'):
     raise InvalidFilenameException()
 
   if exists(filename):
-    raise FileExistsException()
+    if overwrite:
+      unlink(filename)
+    else:
+      raise FileExistsException()
 
   con=sqlite.connect(filename)
   cur=con.cursor()

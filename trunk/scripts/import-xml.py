@@ -22,14 +22,13 @@ else:
 from xml.sax import make_parser, saxutils, ContentHandler
 from sys import argv, exit, stderr
 import re
+from create import createXelapedia
 
 class XelapediaImport(ContentHandler):
-  def __init__(self, db):
+  def __init__(self, dbfile):
+    createXelapedia(dbfile)
     self.con=sqlite.connect(dbfile)
     self.cur=self.con.cursor()
-    self.cur.execute('DELETE FROM articles')
-    self.cur.execute('DELETE FROM titles')
-    self.cur.execute('DELETE FROM redirects')
     self.cur.execute('UPDATE config SET type=\'plain\' WHERE id=0')
     self.con.commit()
     self.inTitle = False
