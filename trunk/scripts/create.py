@@ -31,8 +31,7 @@ CREATE TABLE redirects(
   redirect text);
 CREATE TABLE articles(
   id integer UNIQUE PRIMARY KEY,
-  contents TEXT,
-  compressed BLOB);
+  contents BLOB);
 CREATE TABLE config(
   id integer UNIQUE PRIMARY KEY,
   main_page TEXT,
