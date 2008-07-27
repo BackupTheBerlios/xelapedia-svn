@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from generated import AboutDialogBase
+import wx
 
-LICENSE='''                    GNU GENERAL PUBLIC LICENSE
+LICENCE='''                    GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
@@ -638,11 +638,12 @@ copy of the Program in return for a fee.
 
                      END OF TERMS AND CONDITIONS'''
 
-class AboutDialog(AboutDialogBase):
-  def __init__(self, parent):
-    AboutDialogBase.__init__(self, parent, -1)
-    self.textLicense.SetValue(LICENSE)
+def createAboutDialogInfo():
+  info=wx.AboutDialogInfo()
+  info.SetName('Xelapedia Creator')
+  info.SetLicence(LICENCE)
+  info.SetCopyright('(C) 2008 Alexander Mueller')
+  info.AddDeveloper('Alexander Mueller')
+  info.SetWebSite('http://www.xelapedia.org')
 
-  def buttonOKHandler(self, evt):
-    self.Close()
-
+  return info

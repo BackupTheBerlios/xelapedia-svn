@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from generated import MainFrameBase
-from about_dlg import AboutDialog
+from info import createAboutDialogInfo
 import wx
 from xelapedia_file import XelapediaFile
 from mediawiki_converter import Converter
@@ -92,5 +92,4 @@ class MainFrame(MainFrameBase):
     evt.Skip()
 
   def menuAboutHandler(self, evt):
-    dlg=AboutDialog(self)
-    dlg.ShowModal()
+    wx.AboutBox(createAboutDialogInfo())
