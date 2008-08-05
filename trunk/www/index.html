@@ -22,18 +22,38 @@
       <h2>About</h2>
       <div class="entry">
          <p>Xelapedia is an offline reader for <a href="http://www.wikipedia.org">Wikipedia</a> as well as any content generated with Mediawiki markup.</p>
+         <p>The contents and the software will be available for several platforms:</p>
+         <ul>
+            <li><b><a href="http://www.openmoko.org">Openmoko</a></b> linux based open source mobile phone
+            <li><b>J2ME</b> based cell phones
+            <li><b>Linux/Windows</b> based netbooks
+         </ul>
       </div>
    </div>
    <div class="post">
-      <h2>Design</h2>
+      <h2>File Format</h2>
       <div class="entry">
+         <p><b>Xelapedia</b> file are SQLite database files. The contents is compressed using the LZMA/7Zip compression algorithm.</p>
       </div>
    </div>
+   <div class="post">
+      <h2>Content Generation</h2>
+      <div class="entry">
+         <p>Xelapedia content is generated using several python scripts:</p>
+         <ul>
+            <li><b>import_xml.py</b> converts a Mediawiki XML to a Xelapedia file
+            <li><b>...</b> optimization scripts that remove redundant markup, etc...
+            <li><b>compress.py</b> compress the <b>Xelapedia</b> contents to save storage space.
+         </ul>
+      </div>
+   </div>
+   <!--
    <div class="post">
       <h2>Screenshots</h2>
       <div class="entry">
       </div>
    </div>
+   -->
    <div class="post">
       <h2>Download</h2>
       <div class="entry">
