@@ -47,6 +47,7 @@ def is_text(fname):
 
 MIME_TYPES={
   '.png': 'image/png',
+  '.jpg': 'image/jpeg',
   '.ico': 'image/x-icon',
   '.xpm': 'image/x-xpm'
 }
