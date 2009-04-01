@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Project SYSTEM "Project-4.2.dtd">
+<!-- eric4 project file for project Xelapedia Creator -->
+<!-- Saved: 2009-04-01, 07:04:18 -->
+<!-- Copyright (C) 2009 Alexander Mueller, XelaRellum@web.de -->
+<Project version="4.2">
+  <ProgLanguage mixed="0">Python</ProgLanguage>
+  <ProjectType>wxPython</ProjectType>
+  <Description></Description>
+  <Version>0.1</Version>
+  <Author>Alexander Mueller</Author>
+  <Email>XelaRellum@web.de</Email>
+  <Sources>
+    <Source>
+      <Name>xelapedia-creator.py</Name>
+    </Source>
+    <Source>
+      <Name>main_frame.py</Name>
+    </Source>
+    <Source>
+      <Name>generated.py</Name>
+    </Source>
+    <Source>
+      <Name>mediawiki_converter.py</Name>
+    </Source>
+    <Source>
+      <Name>info.py</Name>
+    </Source>
+    <Source>
+      <Name>xelapedia_file.py</Name>
+    </Source>
+  </Sources>
+  <Forms>
+  </Forms>
+  <Translations>
+  </Translations>
+  <Resources>
+  </Resources>
+  <Interfaces>
+  </Interfaces>
+  <Others>
+  </Others>
+  <MainScript>
+    <Name>xelapedia-creator.py</Name>
+  </MainScript>
+  <Vcs>
+    <VcsType>None</VcsType>
+  </Vcs>
+  <FiletypeAssociations>
+    <FiletypeAssociation pattern="*.pyw" type="SOURCES" />
+    <FiletypeAssociation pattern="*.idl" type="INTERFACES" />
+    <FiletypeAssociation pattern="*.py" type="SOURCES" />
+    <FiletypeAssociation pattern="*.ptl" type="SOURCES" />
+  </FiletypeAssociations>
+</Project>
