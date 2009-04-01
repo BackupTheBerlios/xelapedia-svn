@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 Alexander Mueller
+# Copyright (C) 2008-2009 Alexander Mueller
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,6 +30,9 @@ class XelapediaImport(ContentHandler):
     self.con=sqlite.connect(dbfile)
     self.cur=self.con.cursor()
     self.cur.execute('UPDATE config SET type=\'plain\' WHERE id=0')
+    self.cur.execute('DELETE FROM articles');
+    self.cur.execute('DELETE FROM titles');
+    self.cur.execute('DELETE FROM redirects');
     self.con.commit()
     self.inTitle = False
     self.inId = False
