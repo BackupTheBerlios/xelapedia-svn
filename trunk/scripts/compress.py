@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 Alexander Mueller
+# Copyright (C) 2008-2009 Alexander Mueller
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -58,7 +58,12 @@ def compressXelapedia(source, dest):
   con.execute('ATTACH ? AS source', (source,))
 
   # update the configuration
-  con.execute('UPDATE config SET type=\'lzma\' WHERE id=0')
+  con.execute('UPDATE config SET value=\'lzma\' WHERE key=\'type\'')
+  
+  # empty the destination database
+  con.execute('DELETE FROM articles')
+  con.execute('DELETE FROM titles')
+  con.execute('DELETE FROM redurects')
 
   # copy the titles
   con.execute('INSERT INTO titles(title, article_id) ' +
@@ -102,3 +107,4 @@ if __name__=='__main__':
     print 'Interrupted!'
   except:
     raise
+    
