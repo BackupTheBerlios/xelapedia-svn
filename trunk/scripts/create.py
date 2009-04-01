@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 Alexander Mueller
+# Copyright (C) 2008-2009 Alexander Mueller
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,9 +38,10 @@ CREATE TABLE config(
   main_page TEXT,
   image_tag TEXT,
   category_tag TEXT,
-  type text);
-INSERT INTO config (id, main_page, image_tag, category_tag, type)
-VALUES(0, 'Main Page', NULL, NULL, 'empty');'''
+  type TEXT,
+  version INTEGER);
+INSERT INTO config (id, main_page, image_tag, category_tag, type, version)
+VALUES(0, 'Main Page', NULL, NULL, 'unknown', 0);'''
 
 class InvalidFilenameException(Exception): pass
 class FileExistsException(Exception): pass
@@ -80,3 +81,4 @@ if __name__=='__main__':
     except KeyboardInterrupt:
       print "Interrupted!"
       sys.exit(1)
+
